@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/layout.dart';
 //import 'package:flutter_application_1/screens/authentication/signin/signin_form.dart';
-import './screens/authentication/welcome.dart';
+//import './screens/authentication/welcome.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './utils/theme.dart';
@@ -23,9 +24,7 @@ class AppWidget extends StatelessWidget {
           title: 'Infra Location Application',
           color: primary,
           theme: MyThemes.theme,
-          home: const Scaffold(
-            body: WelcomeScreen(),
-          ),
+          home: const LayoutPage(),
         );
       },
     );

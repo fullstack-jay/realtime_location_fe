@@ -39,6 +39,13 @@ dependencies:
   flutter_svg: ^1.1.6
   loading_animation_widget: ^1.2.0+4
   hive: ^2.2.3
+  google_maps_flutter: ^2.2.3
+  location: ^4.4.0
+  timeago: ^3.4.0
+  badges: ^3.0.2
+  flutter_polyline_points: ^1.0.0
+  screenshot: ^2.1.0
+  salomon_bottom_bar: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +72,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/
-  # - assets/images/
+    - assets/images/
   # - assets/dotenv/
 
   # An image asset can refer to one or more resolution-specific "variants", see
