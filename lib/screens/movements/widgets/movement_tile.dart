@@ -4,14 +4,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/screens/movements/map/movement_live_map.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/models/movement.dart';
 
 class MovementTile extends StatelessWidget {
-  const MovementTile({
+  MovementTile({
     Key? key,
     required this.movement,
   }) : super(key: key);
 
-  final Movement movement;
+  var role = Role.creator; // Change this to match your use case
+  var movement = Movement(
+    id: "123",
+    title: "Clean the Beach",
+    description: "A movement to clean the local beaches every weekend.",
+    members: ["user1", "user2", "user3"],
+    creator: "creator_user_id",
+    createdAt: DateTime.now().subtract(Duration(days: 10)),
+    km: 10,
+    role: Role.creator,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +121,7 @@ class MovementTile extends StatelessWidget {
                               color: primary,
                             ),
                             Text(
-                              " ${movement.members}+",
+                              " ${movement.members.length}+",
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: primary,
@@ -132,12 +143,13 @@ class MovementTile extends StatelessWidget {
                           size: 20.sp,
                         ),
                         onPressed: () {
-                          // pushPage(
-                          //   context,
-                          //   to: MovementLiveMap(
-                          //     movement: movement,
-                          //   ),
-                          // );
+                          pushPage(
+                            context,
+                            to: MovementLiveMap(
+                              movementTitle: movement
+                                  .title, // Replace with the actual title
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -148,9 +160,9 @@ class MovementTile extends StatelessWidget {
                           ),
                         ),
                         label: Text(
-                          movement.role == Role.viewer
-                              ? "Watch movement"
-                              : "Join movement",
+                          role == Role.viewer
+                              ? "Lihat pergerakan"
+                              : "Gabung pergerakan",
                           style: TextStyle(
                             fontSize: 12.sp,
                           ),
@@ -166,24 +178,4 @@ class MovementTile extends StatelessWidget {
       ),
     );
   }
-}
-
-// Frontend-only Movement class
-class Movement {
-  final String title;
-  final String creator;
-  final int members;
-  final Role role;
-
-  Movement({
-    required this.title,
-    required this.creator,
-    required this.members,
-    required this.role,
-  });
-}
-
-enum Role {
-  viewer,
-  participant,
 }

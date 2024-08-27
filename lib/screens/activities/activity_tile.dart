@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_application_1/models/activity.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/helpers.dart';
 import '../components/warn_method.dart';
 
 // Dummy model for Activity
-class Activity {
-  final int id;
-  final String type;
-  final DateTime createdAt;
-  final String text;
-
-  Activity({
-    required this.id,
-    required this.type,
-    required this.createdAt,
-    required this.text,
-  });
-}
-
 class ActivityTile extends StatelessWidget {
   const ActivityTile({
     Key? key,
@@ -33,9 +20,9 @@ class ActivityTile extends StatelessWidget {
 
   // Dummy mapping for icon types
   static const Map<String, IconData> toIcon = {
-    'exercise': Icons.fitness_center,
-    'work': Icons.work,
-    'study': Icons.book,
+    'pencarian': Icons.search,
+    'kebakaran': Icons.fire_extinguisher,
+    'kecelakaan': Icons.car_crash,
     // Add more types as necessary
   };
 
@@ -49,9 +36,9 @@ class ActivityTile extends StatelessWidget {
       confirmDismiss: (direction) async {
         final delete = await warnMethod(
           context,
-          title: "Move Activity to Trash",
-          subtitle: "Are you sure do you want to delete this activity?",
-          okButtonText: "Delete",
+          title: "Pindahkan Aktivitas ke Sampah",
+          subtitle: "Apakah anda yakin ingin menghapus aktivitas ini?",
+          okButtonText: "Hapus",
         );
         if (delete == true) {
           return await onDelete(activity.id);
@@ -80,7 +67,8 @@ class ActivityTile extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              toIcon[activity.type] ?? Icons.help_outline, // Fallback icon if type not found
+              toIcon[activity.type] ??
+                  Icons.help_outline, // Fallback icon if type not found
               size: 30.sp,
               color: lightPrimary.withOpacity(0.8),
             ),

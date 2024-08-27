@@ -45,12 +45,12 @@ class _MovementsPageState extends State<MovementsPage> {
         // Example mock data
         Movement(
           id: 1,
-          name: "Movement 1",
+          name: "Perjalanan 1",
           createdAt: DateTime.now().subtract(Duration(days: 1)),
         ),
         Movement(
           id: 2,
-          name: "Movement 2",
+          name: "Perjalanan 2",
           createdAt: DateTime.now().subtract(Duration(days: 2)),
         ),
       ];
@@ -67,7 +67,7 @@ class _MovementsPageState extends State<MovementsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Movements",
+                "Perjalanan",
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w800,
@@ -82,7 +82,7 @@ class _MovementsPageState extends State<MovementsPage> {
               ),
             ],
           ),
-          Expanded(
+          const Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

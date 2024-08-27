@@ -37,10 +37,10 @@ class MovementStoryCard extends StatelessWidget {
               onTap: () async {
                 final onContinue = await warnMethod(
                   context,
-                  title: "Join $movementTitle Movement",
+                  title: "Gabung $movementTitle",
                   subtitle:
-                      "Click continue to join the $movementTitle movement.",
-                  okButtonText: "Continue",
+                      "Tekan lanjutkan untuk bergabung dengan $movementTitle.",
+                  okButtonText: "Lanjutkan",
                 );
                 if (onContinue != true || !mounted) return;
                 // Action on continue (e.g., navigate to another page)
@@ -77,15 +77,15 @@ class MovementStoryCard extends StatelessWidget {
                         ],
                       ),
                       padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 1.5.h,
+                        horizontal: 14.w,
+                        vertical: 3.h,
                       ),
                       child: Text(
-                        "On going",
+                        "Sedang berlangsung",
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: white,
-                        ),
+                            fontSize: 8.sp,
+                            color: white,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                     const Spacer(),

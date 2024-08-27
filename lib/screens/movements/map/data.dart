@@ -19,7 +19,7 @@ class MapMenu {
   static List<MapMenu> items = [
     MapMenu(
       id: 1,
-      text: "Messages",
+      text: "Pesan",
       icon: Icons.message,
       page: MessagesPage(
         onSendMessage: (message) {},
@@ -27,13 +27,13 @@ class MapMenu {
     ),
     MapMenu(
       id: 2,
-      text: "Members",
+      text: "Anggota",
       icon: Icons.group,
       page: const MembersPage(),
     ),
     MapMenu(
       id: 3,
-      text: "Settings",
+      text: "Pengaturan",
       icon: Icons.settings,
       page: const SettingsPage(),
     ),

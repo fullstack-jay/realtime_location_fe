@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/activities/activities_page.dart';
 import 'package:flutter_application_1/screens/home/home_page.dart';
+import 'package:flutter_application_1/screens/profile/profile_page.dart';
 import 'package:flutter_application_1/screens/movements/movements_pages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/utils/colors.dart';
@@ -23,6 +24,7 @@ class _LayoutPageState extends State<LayoutPage> {
     ),
     const MovementsPage(),
     const ActivitiesPage(),
+    ProfilePage(),
   ];
 
   int currentPage = 0;
@@ -86,21 +88,21 @@ class _LayoutPageState extends State<LayoutPage> {
                     selectedColor: Colors.blue.shade200,
                     unselectedColor: veryLightGrey,
                     icon: Icon(Icons.home, size: 25.sp),
-                    title: const Text("Home"),
+                    title: const Text("Beranda"),
                   ),
                   // Menu item 2
                   SalomonBottomBarItem(
                     selectedColor: Colors.blue.shade200,
                     unselectedColor: veryLightGrey,
                     icon: Icon(Icons.explore, size: 25.sp),
-                    title: const Text("Explore"),
+                    title: const Text("Jelajah"),
                   ),
                   // Menu item 3
                   SalomonBottomBarItem(
                     selectedColor: Colors.blue.shade200,
                     unselectedColor: veryLightGrey,
                     icon: Icon(Icons.history, size: 25.sp),
-                    title: const Text("Histori"),
+                    title: const Text("Riwayat"),
                   ),
                   // Menu item 4
                   SalomonBottomBarItem(
@@ -117,7 +119,7 @@ class _LayoutPageState extends State<LayoutPage> {
                         ),
                       ),
                     ),
-                    title: const Text("Profile"),
+                    title: const Text("Profil"),
                   ),
                 ],
               ),

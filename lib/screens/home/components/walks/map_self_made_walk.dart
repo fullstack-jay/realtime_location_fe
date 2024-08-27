@@ -10,31 +10,12 @@ import '../../../../utils/colors.dart';
 //import '../../../../utils/keys.dart';
 import '../../../movements/map/widgets/warn_dialog.dart';
 import '../../../movements/widgets/app_bar_2.dart';
+import 'package:flutter_application_1/models/self_made_walk.dart';
 import 'save_walk_dialog.dart';
 
 enum SelfMadeWalkMapMode { idle, walk }
 
 // Custom class to replace backend dependency
-class CustomSelfMadeWalk {
-  final int id;
-  final LatLng initialPosition;
-  final List<LatLng> coordinates;
-  final LatLng destinationPosition;
-  final String title;
-  final DateTime createdAt;
-  final DateTime endedAt;
-
-  CustomSelfMadeWalk({
-    required this.id,
-    required this.initialPosition,
-    required this.coordinates,
-    required this.destinationPosition,
-    required this.title,
-    required this.createdAt,
-    required this.endedAt,
-  });
-}
-
 class SelfMadeWalkMap extends StatefulWidget {
   const SelfMadeWalkMap({
     super.key,
@@ -47,7 +28,7 @@ class SelfMadeWalkMap extends StatefulWidget {
   final Map<String, LatLng> points;
   final SelfMadeWalkMapMode mode;
   final DateTime startedAt;
-  final CustomSelfMadeWalk? walk;
+  final SelfMadeWalk? walk;
 
   @override
   State<SelfMadeWalkMap> createState() => _SelfMadeWalkMapState();
@@ -276,7 +257,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         );
                         if (name == null) return;
                         await Future.delayed(const Duration(milliseconds: 400));
-                        final walk = CustomSelfMadeWalk(
+                        final walk = SelfMadeWalk(
                           id: 1,
                           initialPosition: origin,
                           coordinates: polylineCurrentLocationCoordinates,

@@ -4,24 +4,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter_application_1/screens/components/warn_method.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/models/notification.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
-// Define a simple AppNotification model for the frontend
-class AppNotification {
-  final DateTime createdAt;
-  final String action;
-  final String message;
-  final Map<String, dynamic> data;
-  final String id;
-
-  AppNotification({
-    required this.createdAt,
-    required this.action,
-    required this.message,
-    required this.data,
-    required this.id,
-  });
-}
 
 class NotificationTile extends StatefulWidget {
   const NotificationTile({
@@ -88,7 +72,9 @@ class _NotificationTileState extends State<NotificationTile> {
                 ),
                 addVerticalSpace(5),
                 Text(
-                  widget.notification.action,
+                  widget.notification.action == NotificationAction.join
+                      ? "Gabung Perjalanan"
+                      : "Yeayyy !",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
@@ -98,23 +84,15 @@ class _NotificationTileState extends State<NotificationTile> {
                 addVerticalSpace(8),
                 Text(widget.notification.message),
                 addVerticalSpace(10),
-                if (widget.notification.action == "join")
+                if (widget.notification.action == NotificationAction.join)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: ElevatedButton.icon(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            size: 20.sp,
-                          ),
-                          onPressed: isDeleting || isDeclining
-                              ? null
-                              : () {
-                                  // Replace with your own navigation logic
-                                  // Example: Navigator.pop(context);
-                                },
+                          icon: Icon(Icons.arrow_back, size: 20.sp),
+                          onPressed: isDeleting || isDeclining ? null : () {},
                           style: ElevatedButton.styleFrom(
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             minimumSize: Size.zero,
@@ -122,12 +100,10 @@ class _NotificationTileState extends State<NotificationTile> {
                             disabledBackgroundColor: lightPrimary,
                             disabledForegroundColor: white,
                             padding: EdgeInsets.symmetric(
-                              vertical: 2.5.h,
-                              horizontal: 15.w,
-                            ),
+                                vertical: 2.5.h, horizontal: 15.w),
                           ),
                           label: Text(
-                            "Join movement",
+                            "Gabung Perjalanan",
                             style: TextStyle(
                               fontSize: 12.sp,
                             ),
@@ -140,16 +116,15 @@ class _NotificationTileState extends State<NotificationTile> {
                             : () async {
                                 final wantDecline = await warnMethod(
                                   context,
-                                  title: "Decline Movement",
+                                  title: "Tolak Perjalanan",
                                   subtitle:
-                                      "Are you sure do you want to decline joining the movement?",
-                                  okButtonText: "Decline",
+                                      "Apakah Anda yakin ingin menolak bergabung dengan perjalanan ini?",
+                                  okButtonText: "Tolak",
                                 );
                                 if (wantDecline != true) return;
                                 setState(() {
                                   isDeclining = true;
                                 });
-                                // Simulate a delay to mimic the decline action
                                 await Future.delayed(Duration(seconds: 2));
                                 setState(() {
                                   isDeclining = false;
@@ -162,16 +137,11 @@ class _NotificationTileState extends State<NotificationTile> {
                           minimumSize: Size.zero,
                           disabledBackgroundColor: Colors.red.shade800,
                           padding: EdgeInsets.symmetric(
-                            vertical: 2.5.h,
-                            horizontal: 15.w,
-                          ),
+                              vertical: 2.5.h, horizontal: 15.w),
                         ),
                         child: Text(
-                          isDeclining ? "Canceling.." : "Decline",
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: white,
-                          ),
+                          isDeclining ? "Batal.." : "Tolak",
+                          style: TextStyle(fontSize: 12.sp, color: white),
                         ),
                       ),
                     ],

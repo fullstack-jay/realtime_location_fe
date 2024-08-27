@@ -34,18 +34,18 @@ class _InviteMembersState extends State<InviteMembers> {
       User(
           id: '1',
           imgUrl: 'https://example.com/image1.jpg',
-          username: 'Alice',
-          joinedAt: 'alice@example.com'),
+          username: 'Rizqi',
+          joinedAt: 'rizqi@example.com'),
       User(
           id: '2',
           imgUrl: 'https://example.com/image2.jpg',
-          username: 'Bob',
-          joinedAt: 'bob@example.com'),
+          username: 'Reza',
+          joinedAt: 'reza@example.com'),
       User(
           id: '3',
           imgUrl: 'https://example.com/image3.jpg',
-          username: 'Charlie',
-          joinedAt: 'charlie@example.com'),
+          username: 'Ardiansyah',
+          joinedAt: 'ardiansyah@example.com'),
     ];
     isLoading = false;
     setState(() {});
@@ -61,8 +61,8 @@ class _InviteMembersState extends State<InviteMembers> {
         isCreating = false;
       });
       showMessage(
-        message: "You created movement ${widget.title}",
-        title: "Movement created successfully",
+        message: "Anda membuat perjalanan${widget.title}",
+        title: "Perjalanan berhasil dibuat",
         type: MessageType.success,
       );
 
@@ -86,7 +86,7 @@ class _InviteMembersState extends State<InviteMembers> {
         Row(
           children: [
             Text(
-              "Invite",
+              "Undang",
               style: TextStyle(
                 fontSize: 16.sp,
                 color: Colors.grey.shade900,
@@ -108,7 +108,7 @@ class _InviteMembersState extends State<InviteMembers> {
                 Row(
                   children: [
                     Text(
-                      "select members".toUpperCase(),
+                      "pilih anggota".toUpperCase(),
                       style: TextStyle(
                         fontSize: 15.sp,
                         color: primary.withOpacity(0.7),
@@ -140,7 +140,7 @@ class _InviteMembersState extends State<InviteMembers> {
                         ),
                         addVerticalSpace(20),
                         Text(
-                          "We're sorry, there is no any member in our system you can invite to your movement",
+                          "Maaf, tidak ada anggota di sistem kami yang dapat Anda undang ke perjalanan Anda",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14.sp,
@@ -217,8 +217,8 @@ class _InviteMembersState extends State<InviteMembers> {
                               if (selected.isEmpty) {
                                 showMessage(
                                   message:
-                                      "Please select a member to start a movement",
-                                  title: "No member selected",
+                                      "Silakan pilih anggota untuk memulai gerakan",
+                                  title: "Tidak ada anggota yang dipilih",
                                   type: MessageType.error,
                                 );
                                 return;
@@ -241,7 +241,7 @@ class _InviteMembersState extends State<InviteMembers> {
                         ),
                       ),
                       label: Text(
-                        isCreating ? "  LOADING  " : "  INVITE  ",
+                        isCreating ? "  TUNGGU SEBENTAR " : "  UNDANG ",
                         style: TextStyle(
                           fontSize: 14.sp,
                         ),

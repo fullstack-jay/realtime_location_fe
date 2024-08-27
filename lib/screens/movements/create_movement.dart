@@ -19,8 +19,8 @@ class CreateMovementPage extends StatefulWidget {
 class _CreateMovementPageState extends State<CreateMovementPage> {
   bool create = true;
 
-  String title = "";
-  String description = "";
+  String title = "Ini title";
+  String description = "Ini Description";
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _CreateMovementPageState extends State<CreateMovementPage> {
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const AnotherCustomAppBar(
-                  title: "Movement",
+                  title: "Perjalanan",
                 ),
               ),
             ),

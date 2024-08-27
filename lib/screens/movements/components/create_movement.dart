@@ -160,8 +160,8 @@ class _CreateMovementState extends State<CreateMovement> {
                                 if (name.isEmpty || cat == null) {
                                   showMessage(
                                     message:
-                                        "Name and category fields are required",
-                                    title: "Fields required*",
+                                        "Kolom nama dan kategori wajib diisi",
+                                    title: "Kolom wajib diisi*",
                                     type: MessageType.error,
                                   );
                                   return;

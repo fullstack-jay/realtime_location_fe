@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/models/activity.dart';
 
 import '../movements/map/widgets/warn_dialog.dart';
 import 'activity_tile.dart';
@@ -21,15 +22,21 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       activities = [
         Activity(
           id: 1,
-          type: 'exercise',
+          type: 'pencarian',
           createdAt: DateTime.now().subtract(Duration(hours: 1)),
-          text: 'Morning Run',
+          text: 'Inspeksi bersama tim BPJT',
         ),
         Activity(
           id: 2,
-          type: 'study',
+          type: 'kebakaran',
           createdAt: DateTime.now().subtract(Duration(days: 1)),
-          text: 'Read Flutter Documentation',
+          text: 'Memadamkan api di KM 52',
+        ),
+        Activity(
+          id: 3,
+          type: 'kecelakaan',
+          createdAt: DateTime.now().subtract(Duration(days: 2)),
+          text: 'Membantu kecelakaan di KM 60',
         ),
       ];
     });
@@ -54,7 +61,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   color: lightPrimary,
                 ),
                 const Text(
-                  "No activities detected yet!",
+                  "Belum ada aktivitas yang terdeteksi!",
                 ),
               ],
             ),
@@ -68,7 +75,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Activities".toUpperCase(),
+                      "Aktivitas".toUpperCase(),
                       style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w800,
@@ -82,10 +89,10 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                             barrierColor: Colors.black26,
                             builder: ((context) {
                               return const WarnDialogWidget(
-                                title: "Move All Activities to Trash",
+                                title: "Pindahkan Semua Aktivitas ke Sampah",
                                 subtitle:
-                                    "Are you sure do you want to delete all activities history?",
-                                okButtonText: "Delete All",
+                                    "Apakah Anda yakin ingin menghapus semua riwayat aktivitas?",
+                                okButtonText: "Hapus Semua",
                               );
                             }),
                           );

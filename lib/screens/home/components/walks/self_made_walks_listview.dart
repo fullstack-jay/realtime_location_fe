@@ -6,6 +6,7 @@ import 'package:flutter_application_1/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../utils/colors.dart';
 import '../../../movements/map/widgets/warn_dialog.dart';
+import 'package:flutter_application_1/models/self_made_walk.dart';
 
 class SelfMadeWalksWidget extends StatefulWidget {
   const SelfMadeWalksWidget({Key? key}) : super(key: key);
@@ -15,19 +16,25 @@ class SelfMadeWalksWidget extends StatefulWidget {
 }
 
 class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
-  // Mock data for demonstration purposes
+  // Updated mock data with all fields initialized
   final List<SelfMadeWalk> walks = [
     SelfMadeWalk(
-      createdAt: DateTime.now().subtract(Duration(days: 1)),
-      title: "Ciujung",
+      id: 1,
       initialPosition: LatLng(37.7749, -122.4194),
+      coordinates: [LatLng(37.7749, -122.4194), LatLng(37.7849, -122.4094)],
       destinationPosition: LatLng(37.7849, -122.4094),
+      title: "Ciujung",
+      createdAt: DateTime.now().subtract(Duration(days: 1)),
+      endedAt: DateTime.now().subtract(Duration(hours: 22)),
     ),
     SelfMadeWalk(
-      createdAt: DateTime.now().subtract(Duration(days: 2)),
-      title: "Balaraja Barat",
+      id: 2,
       initialPosition: LatLng(34.0522, -118.2437),
+      coordinates: [LatLng(34.0522, -118.2437), LatLng(34.0622, -118.2537)],
       destinationPosition: LatLng(34.0622, -118.2537),
+      title: "Balaraja Barat",
+      createdAt: DateTime.now().subtract(Duration(days: 2)),
+      endedAt: DateTime.now().subtract(Duration(days: 1, hours: 22)),
     ),
   ];
 
@@ -177,18 +184,18 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Map<String, LatLng> points =
-                                        <String, LatLng>{
+                                    Map<String, LatLng> points = {
                                       "origin": walk.initialPosition,
                                       "destination": walk.destinationPosition,
                                     };
-                                    pushPage(
+                                    Navigator.push(
                                       context,
-                                      to: SelfMadeWalkMap(
-                                        points: points,
-                                        //walk: walk,
-                                        mode: SelfMadeWalkMapMode.idle,
-                                        startedAt: DateTime.now(),
+                                      MaterialPageRoute(
+                                        builder: (context) => SelfMadeWalkMap(
+                                          points: points,
+                                          mode: SelfMadeWalkMapMode.idle,
+                                          startedAt: DateTime.now(),
+                                        ),
                                       ),
                                     );
                                   },
@@ -249,19 +256,4 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
       ],
     );
   }
-}
-
-// Mock data class for demonstration purposes
-class SelfMadeWalk {
-  final DateTime createdAt;
-  final String title;
-  final LatLng initialPosition;
-  final LatLng destinationPosition;
-
-  SelfMadeWalk({
-    required this.createdAt,
-    required this.title,
-    required this.initialPosition,
-    required this.destinationPosition,
-  });
 }
