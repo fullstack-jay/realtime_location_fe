@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_application_1/controllers/self_made_walks_controller.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:flutter_application_1/screens/movements/map/widgets/marker_custom.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/models/user.dart';
+import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
 //import '../../../../utils/keys.dart';
@@ -35,6 +39,9 @@ class SelfMadeWalkMap extends StatefulWidget {
 }
 
 class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
+  final walkController = Get.put(WalksController());
+  final profile = AuthService().getAuth();
+
   late LatLng origin;
   late LatLng destination;
   LatLng? currentLocation;
@@ -61,45 +68,52 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     super.initState();
   }
 
-  // void getRoutePolylines() async {
-  //   try {
-  //     PolylinePoints polylinePoints = PolylinePoints();
-  //     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //       googleApiKey,
-  //       PointLatLng(origin.latitude, origin.longitude),
-  //       PointLatLng(destination.latitude, destination.longitude),
-  //     );
-  //     if (result.points.isNotEmpty) {
-  //       for (PointLatLng point in result.points) {
-  //         polylineDestinationCoordinates.add(LatLng(point.latitude, point.longitude));
-  //       }
-  //       if (!mounted) return;
-  //       setState(() {});
-  //     }
-  //   } catch (e) {
-  //     // Handle error
-  //   }
-  // }
+  void getRoutePolylines() async {
+    try {
+      // Dummy polyline points
+      List<PointLatLng> dummyPoints = [
+        PointLatLng(origin.latitude, origin.longitude),
+        PointLatLng(origin.latitude + 0.01, origin.longitude + 0.01),
+        PointLatLng(destination.latitude, destination.longitude),
+      ];
+
+      for (PointLatLng point in dummyPoints) {
+        polylineDestinationCoordinates
+            .add(LatLng(point.latitude, point.longitude));
+      }
+
+      if (!mounted) return;
+      setState(() {});
+    } catch (e) {
+      // Handle error
+    }
+  }
 
   void getLocation() async {
     Location location = Location();
     final locationData = await location.getLocation();
     setState(() {
-      currentLocation = LatLng(locationData.latitude!, locationData.longitude!);
+      currentLocation = LatLng(
+        locationData.latitude!,
+        locationData.longitude!,
+      );
     });
     if (!mounted) return;
     location.onLocationChanged.listen((newLoc) async {
       if (!mounted) return;
       setState(() {
-        currentLocation = LatLng(newLoc.latitude!, newLoc.longitude!);
+        currentLocation = LatLng(
+          newLoc.latitude!,
+          newLoc.longitude!,
+        );
       });
 
       if (googleMapController != null) {
         await addMarker(
-          "currentLocation",
+          "lokasi saat ini",
           currentLocation!,
-          "Current Location",
-          "This is your current location",
+          "Reza, Lokasi saat ini",
+          "Ini adalah lokasi kamu saat ini",
         );
         googleMapController?.animateCamera(
           CameraUpdate.newCameraPosition(
@@ -130,14 +144,17 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
           barrierColor: Colors.black26,
           builder: (context) {
             return const WarnDialogWidget(
-              title: "Stop Travelling",
+              title: "Berhenti Bepergian",
               subtitle:
-                  "Changes made on this page will not be saved. Are you sure you want to close?",
-              okButtonText: "Close",
+                  "Perubahan yang dilakukan pada halaman ini tidak akan disimpan. Apakah Anda yakin ingin menutupnya?",
+              okButtonText: "Keluar",
             );
           },
         );
-        return leave == true;
+        if (leave == true) {
+          return true;
+        }
+        return false;
       },
       child: Container(
         color: primary,
@@ -241,11 +258,15 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           transitionBuilder:
                               (context, animation, secondaryAnimation, child) {
                             final tween = Tween(
-                                begin: const Offset(1, 0), end: Offset.zero);
+                              begin: const Offset(1, 0),
+                              end: Offset.zero,
+                            );
                             return SlideTransition(
                               position: tween.animate(
                                 CurvedAnimation(
-                                    parent: animation, curve: Curves.easeInOut),
+                                  parent: animation,
+                                  curve: Curves.easeInOut,
+                                ),
                               ),
                               child: child,
                             );
@@ -264,12 +285,13 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           destinationPosition: destination,
                           title: name,
                           createdAt: widget.startedAt,
+                          creatorId: AuthService().getAuth()?.userId ?? "unknown-user",
                           endedAt: DateTime.now(),
                         );
                         // Logic to handle saved walk locally
-                        print("Walk saved: $name");
+                        await walkController.addWalk(walk);
                         if (!mounted) return;
-                        Navigator.of(context).pop();
+                        popPage(context);
                       },
                       child: const Text("Stop"),
                     ),
@@ -285,7 +307,8 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           ?.animateCamera(CameraUpdate.newCameraPosition(
                         CameraPosition(
                           zoom: zoomLevel,
-                          target: polylineCurrentLocationCoordinates.last,
+                          target: polylineCurrentLocationCoordinates[
+                              polylineCurrentLocationCoordinates.length - 1],
                         ),
                       ));
                     },
@@ -301,8 +324,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     );
   }
 
-  Future<void> addMarker(
-      String id, LatLng location, String title, String desc) async {
+  addMarker(String id, LatLng location, String title, String desc) async {
     Marker marker = Marker(
       markerId: MarkerId(id),
       position: location,
@@ -314,11 +336,11 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
 
     if (id == "final-made-destination" || id == "currentLocation") {
       marker = await customMarker(
-        CustomMoveUser(
-          user: CustomUser(
+        MoveUser(
+          user: User(
             id: id,
-            username: "You",
             imgUrl: "your_profile_pic_url", // Placeholder for user profile pic
+            username: "You",
             joinedAt: "your_joined_date", // Placeholder for joined date
           ),
           location: location,

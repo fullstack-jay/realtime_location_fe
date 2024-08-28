@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_application_1/models/user.dart';
 
 // ... kode lainnya ...
 
@@ -105,32 +106,4 @@ class _ChatMessageTileState extends State<ChatMessageTile> {
       ),
     );
   }
-}
-
-class ChatMessage {
-  final User user;
-  final String message;
-  final DateTime sentAt;
-  final bool seen;
-
-  ChatMessage({
-    required this.user,
-    required this.message,
-    required this.sentAt,
-    required this.seen,
-  });
-}
-
-class User {
-  final String id;
-  final String username;
-  final String imgUrl;
-  final DateTime joinedAt;
-
-  User({
-    required this.id,
-    required this.username,
-    required this.imgUrl,
-    required this.joinedAt,
-  });
 }

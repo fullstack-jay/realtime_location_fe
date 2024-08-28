@@ -2,6 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelfMadeWalk {
   int id;
+  String creatorId;
   LatLng initialPosition;
   List<LatLng> coordinates;
   LatLng destinationPosition;
@@ -11,6 +12,7 @@ class SelfMadeWalk {
 
   SelfMadeWalk({
     required this.id,
+    required this.creatorId,
     required this.initialPosition,
     required this.coordinates,
     required this.destinationPosition,
@@ -39,6 +41,7 @@ class SelfMadeWalk {
         json["destinationPosition"]["long"],
       ),
       title: json["title"],
+      creatorId: json["creatorId"],
       createdAt: json["createdAt"],
       endedAt: json["endedAt"],
     );
@@ -61,6 +64,7 @@ class SelfMadeWalk {
         "long": walk.destinationPosition.longitude
       },
       "title": walk.title,
+      "creatorId": walk.creatorId,
       "createdAt": walk.createdAt,
       "endedAt": walk.endedAt,
     };

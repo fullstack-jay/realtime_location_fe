@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter_application_1/screens/profile/caches.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/auth_wrapper.dart';
 
 import '../movements/map/widgets/warn_dialog.dart';
 
@@ -136,10 +137,14 @@ class ProfilePage extends StatelessWidget {
                     );
                     if (logout != true) return;
 
-                    // Logika logout dummy, misalnya kembali ke halaman login
-                    Get.offAllNamed('/login'); // Contoh navigasi setelah logout
+                    // Clear any authentication data if necessary
+                    // For example:
+                    // await authService.removeAuth();
+
+                    // Navigate to AuthWrapper
+                    Get.offAll(() => const AuthWrapper());
                   },
-                ),
+                )
               ],
             ),
           ),

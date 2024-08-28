@@ -25,6 +25,7 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
       destinationPosition: LatLng(37.7849, -122.4094),
       title: "Ciujung",
       createdAt: DateTime.now().subtract(Duration(days: 1)),
+      creatorId: "Rizqi Reza Ardiansyah",
       endedAt: DateTime.now().subtract(Duration(hours: 22)),
     ),
     SelfMadeWalk(
@@ -34,6 +35,7 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
       destinationPosition: LatLng(34.0622, -118.2537),
       title: "Balaraja Barat",
       createdAt: DateTime.now().subtract(Duration(days: 2)),
+      creatorId: "Surya damarjati",
       endedAt: DateTime.now().subtract(Duration(days: 1, hours: 22)),
     ),
   ];

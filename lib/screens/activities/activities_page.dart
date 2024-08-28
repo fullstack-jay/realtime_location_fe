@@ -22,19 +22,22 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       activities = [
         Activity(
           id: 1,
-          type: 'pencarian',
+          type: ActivityType.add,
+          creatorId: "Adam",
           createdAt: DateTime.now().subtract(Duration(hours: 1)),
           text: 'Inspeksi bersama tim BPJT',
         ),
         Activity(
           id: 2,
-          type: 'kebakaran',
+          type: ActivityType.delete,
+          creatorId: "Rizqi",
           createdAt: DateTime.now().subtract(Duration(days: 1)),
           text: 'Memadamkan api di KM 52',
         ),
         Activity(
           id: 3,
-          type: 'kecelakaan',
+          type: ActivityType.add,
+          creatorId: "Ardiansyah",
           createdAt: DateTime.now().subtract(Duration(days: 2)),
           text: 'Membantu kecelakaan di KM 60',
         ),

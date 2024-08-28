@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-//import 'package:flutter_application_1/screens/movements/map/menu_pages/widgets/chat_message_tile.dart';
+import 'package:flutter_application_1/screens/movements/map/menu_pages/widgets/chat_message_tile.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/controllers/movements_controller.dart';
 import '../../widgets/app_bar_2.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key, required this.onSendMessage});
@@ -16,6 +19,8 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   final _inputCnt = TextEditingController();
   final _scrollController = ScrollController();
+  final currentUser = AuthService().getAuth();
+  final _moveCnt = Get.find<MovementController>();
 
   // Dummy data to replace backend data
   final String currentUserID = "currentUser123";
@@ -110,11 +115,12 @@ class _MessagesPageState extends State<MessagesPage> {
                         reverse: true,
                         itemCount: chatMessages.length,
                         itemBuilder: ((context, index) {
-                          //final message = chatMessages.reversed.toList()[index];
-                          // return ChatMessageTile(
-                          //   message: message,
-                          //   isSender: message.user.id == currentUserID,
-                          // );
+                          final message =
+                              _moveCnt.chatMessages.reversed.toList()[index];
+                          return ChatMessageTile(
+                            message: message,
+                            isSender: message.user.id == currentUser!.userId,
+                          );
                         }),
                       ),
               ),

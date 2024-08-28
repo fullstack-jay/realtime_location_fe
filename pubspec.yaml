@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^1.1.6
   loading_animation_widget: ^1.2.0+4
   hive: ^2.2.3
+  hive_flutter: ^1.1.0
   google_maps_flutter: ^2.2.3
   location: ^4.4.0
   timeago: ^3.4.0
@@ -46,7 +47,9 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   screenshot: ^2.1.0
   salomon_bottom_bar: ^3.3.1
-  
+  dio: ^5.0.1
+  flutter_dotenv: ^5.0.2
+  logger: ^2.4.0
 
 dev_dependencies:
   flutter_test:
