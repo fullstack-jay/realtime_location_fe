@@ -45,7 +45,7 @@ class _ChooseLocationWidgetState extends State<ChooseLocationWidget> {
                     ),
                   )
                 : Text(
-                    "Choose location",
+                    "Pilih Lokasi",
                     maxLines: 1,
                     style: TextStyle(
                       color: Colors.grey.shade600,
@@ -68,7 +68,7 @@ class _ChooseLocationWidgetState extends State<ChooseLocationWidget> {
             if (location != null) {
               setState(() {
                 text =
-                    "${location["destination"]?.latitude},${location["destination"]?.longitude}";
+                    "${location["tujuan"]?.latitude},${location["tujuan"]?.longitude}";
               });
             }
           },

@@ -32,7 +32,7 @@ class _SaveWalkDialogState extends State<SaveWalkDialog> {
           children: [
             addVerticalSpace(10),
             Text(
-              "travel name*".toUpperCase(),
+              "nama perjalanan*".toUpperCase(),
               style: TextStyle(
                 fontSize: 14.sp,
                 color: primary.withOpacity(0.7),
@@ -41,7 +41,7 @@ class _SaveWalkDialogState extends State<SaveWalkDialog> {
             ),
             addVerticalSpace(8),
             TextInputField(
-              hintText: "a name",
+              hintText: "nama",
               onChanged: (value) {
                 if (!mounted) return;
                 setState(() {
@@ -56,7 +56,7 @@ class _SaveWalkDialogState extends State<SaveWalkDialog> {
                 popPage(context, data: name);
               },
               child: Text(
-                "Save",
+                "Simpan",
                 style: TextStyle(
                   fontSize: 14.sp,
                 ),

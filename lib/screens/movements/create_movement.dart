@@ -19,8 +19,8 @@ class CreateMovementPage extends StatefulWidget {
 class _CreateMovementPageState extends State<CreateMovementPage> {
   bool create = true;
 
-  String title = "Ini title";
-  String description = "Ini Description";
+  String title = "";
+  String description = "";
 
   @override
   Widget build(BuildContext context) {

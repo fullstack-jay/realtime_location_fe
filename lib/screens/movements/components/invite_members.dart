@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-// import 'package:flutter_application_1/controllers/movements_controller.dart'; // Removed backend controller
-// import 'package:flutter_application_1/models/user.dart'; // Removed backend user model
+import 'package:flutter_application_1/controllers/movements_controller.dart'; // Removed backend controller
+import 'package:flutter_application_1/models/user.dart'; // Removed backend user model
 import 'package:flutter_application_1/screens/components/top_snackbar.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import '../../../../utils/helpers.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_1/services/db_service.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 
 class InviteMembers extends StatefulWidget {
   const InviteMembers({
@@ -22,7 +25,9 @@ class InviteMembers extends StatefulWidget {
 
 class _InviteMembersState extends State<InviteMembers> {
   List<User> selected = [];
-  // final _moveCnt = Get.find<MovementController>(); // Removed backend controller
+  final _moveCnt = Get.find<MovementController>(); // Removed backend controller
+  final dbService = DBService();
+  final profile = AuthService().getAuth();
   late bool isLoading;
   List<User> users = [];
   bool isCreating = false;
@@ -51,26 +56,31 @@ class _InviteMembersState extends State<InviteMembers> {
     setState(() {});
   }
 
-  void _createMovement() {
+  void _createMovement() async {
     setState(() {
       isCreating = true;
     });
-
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        isCreating = false;
-      });
-      showMessage(
-        message: "Anda membuat perjalanan${widget.title}",
-        title: "Perjalanan berhasil dibuat",
-        type: MessageType.success,
-      );
-
-      // Here we would normally add the movement to some controller
-      // _moveCnt.addMovement(movement);
-
-      popPage(context);
+    final movement = await dbService.createMovement(
+      title: widget.title,
+      description: "This movement created as ${widget.description}",
+      actors: selected.map<String>((user) => user.id).toList(),
+      creatorName: profile!.fullName,
+    );
+    if (!mounted) return;
+    setState(() {
+      isCreating = false;
     });
+    if (movement == null) return;
+    showMessage(
+      message: "You created movement ${movement.title}",
+      title: "Movement created successfully",
+      type: MessageType.success,
+    );
+
+    _moveCnt.addMovement(movement);
+
+    if (!mounted) return;
+    popPage(context);
   }
 
   @override
@@ -256,19 +266,4 @@ class _InviteMembersState extends State<InviteMembers> {
       ],
     );
   }
-}
-
-// Frontend-only User class
-class User {
-  final String id;
-  final String imgUrl;
-  final String username;
-  final String joinedAt;
-
-  User({
-    required this.id,
-    required this.imgUrl,
-    required this.username,
-    required this.joinedAt,
-  });
 }

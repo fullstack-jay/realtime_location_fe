@@ -1,31 +1,13 @@
-import 'package:hive/hive.dart';
-
 enum Role { viewer, creator, member }
 
-@HiveType(typeId: 1)
 class Movement {
-  @HiveField(0)
   String id;
-
-  @HiveField(1)
   String title;
-
-  @HiveField(2)
   String description;
-
-  @HiveField(3)
   String creator;
-
-  @HiveField(4)
   int km;
-
-  @HiveField(5)
-  List<String> members;
-
-  @HiveField(6)
+  int members;
   DateTime createdAt;
-
-  @HiveField(7)
   Role role;
 
   Movement({
@@ -44,7 +26,7 @@ class Movement {
       id: json["_id"],
       title: json["title"],
       description: json["description"],
-      members: List<String>.from(json["actors"]),
+      members: json["actors"].length,
       creator: json["creator"],
       createdAt: DateTime.parse(json["createdAt"]),
       km: 17,

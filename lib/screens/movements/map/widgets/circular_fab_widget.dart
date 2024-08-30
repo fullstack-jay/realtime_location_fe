@@ -7,6 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_application_1/screens/components/warn_method.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/services/db_service.dart';
+import 'package:flutter_application_1/controllers/movements_controller.dart';
+import 'package:get/get.dart';
 
 const double buttonSize = 60;
 
@@ -41,6 +44,9 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
   late AnimationController controller;
   late List<FabItem> fabItems;
 
+  final dbService = DBService();
+  final _mvt = Get.find<MovementController>();
+
   _init() {
     fabItems = [
       FabItem(
@@ -54,6 +60,11 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
             okButtonText: "Close",
           );
           if (close == null) return;
+          final deleted = await dbService.deleteMovement(widget.id);
+          if (deleted == true && mounted) {
+            _mvt.removeMovement(widget.id);
+            popPage(context);
+          }
           Navigator.of(context).pop();
         },
       ),

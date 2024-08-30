@@ -67,7 +67,7 @@ class _MovementsPageState extends State<MovementsPage> {
                             .toList(),
                       );
                     },
-                    onLoading: const Text("Loading, please wait..."),
+                    onLoading: const Text("Loading, Tunggu sebentar yaa..."),
                     onEmpty: const OnEmpty(),
                     onError: (error) => Text("$error"),
                   ),

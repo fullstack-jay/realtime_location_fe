@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/screens/components/warn_method.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
+import 'package:flutter_application_1/controllers/movements_controller.dart';
+import 'package:get/get.dart';
 
 import '../../widgets/app_bar_2.dart';
 import 'widgets/setting_tile.dart';
@@ -15,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final move = Get.find<MovementController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const AnotherCustomAppBar(
-                  title: "Settings",
+                  title: "Pengaturan",
                 ),
               ),
             ),
@@ -45,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "General".toUpperCase(),
+                  "Umum".toUpperCase(),
                   style: TextStyle(
                     fontSize: 14.5.sp,
                     color: primary.withOpacity(0.8),
@@ -70,66 +73,66 @@ class _SettingsPageState extends State<SettingsPage> {
                       SettingTile(
                         icon: Icons.group_off_outlined,
                         onSwitchChanged: (value) {},
-                        text: "Restrict new joiners",
+                        text: "Batasi anggota baru",
                         active: true,
                         subText:
-                            "Allow only your friends to discover profile when using Near Me in your location. ",
+                            "Izinkan hanya teman Anda yang menemukan profil saat menggunakan didekat saya di lokasi Anda. ",
                       ),
                       SettingTile(
                         icon: Icons.directions_outlined,
                         onSwitchChanged: (value) {},
-                        text: "Routes & directions",
+                        text: "Rute & Arah",
                         active: true,
                         subText:
-                            "Showing current roads members are passing through if they turned on",
+                            "Menampilkan jalan yang sedang dilalui anggota jika dihidupkan",
                       ),
                       SettingTile(
                         icon: Icons.location_on_outlined,
                         onSwitchChanged: (value) {},
-                        text: "Custom marker",
+                        text: "Penanda khusus",
                         active: true,
                         subText:
-                            "Set custom markers to actors currently moving",
+                            "Tetapkan penanda khusus untuk aktor yang sedang bergerak",
                       ),
                       SettingTile(
                         icon: Icons.calendar_month,
                         onSwitchChanged: (value) {},
-                        text: "End time",
+                        text: "Waktu akhir",
                         active: true,
                         subText:
-                            "Set custom markers to actors currently moving",
+                            "Tetapkan penanda khusus untuk aktor yang sedang bergerak",
                       ),
                       SettingTile(
                         icon: Icons.location_off_outlined,
                         onSwitchChanged: (value) {},
-                        text: "Active",
+                        text: "Aktif",
                         active: true,
                         subText:
-                            "Disable other users to view your current location",
+                            "Nonaktifkan pengguna lain untuk melihat lokasi Anda saat ini",
                       ),
                       SettingTile(
                         icon: Icons.logout_outlined,
                         onTap: () async {
                           final res = await warnMethod(
                             context,
-                            title: "Leave Movement Forever?",
+                            title: "Meninggalkan perjalanan selamanya?",
                             subtitle:
-                                "Are you sure do you want to leave this movement forever?",
-                            okButtonText: "Leave",
+                                "Apakah kamu yakin ingin meninggalkan perjalanan selamanya?",
+                            okButtonText: "Tinggalkan",
                           );
                           if (res == true && mounted) {
                             // Handle leaving movement logic here
                           }
                         },
-                        text: "Leave movement",
-                        subText: "Leave this movement forever",
+                        text: "Meninggalkan perjalanan",
+                        subText: "Meninggalkan perjalanan ini selamanya",
                       ),
                     ],
                   ),
                 ),
                 addVerticalSpace(15),
                 Text(
-                  "Messaging".toUpperCase(),
+                  "pesan".toUpperCase(),
                   style: TextStyle(
                     fontSize: 14.5.sp,
                     color: primary.withOpacity(0.8),
@@ -154,18 +157,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       SettingTile(
                         icon: Icons.tv_off_rounded,
                         onSwitchChanged: (value) {},
-                        text: "Turn off messages",
+                        text: "Matikan pesan",
                         active: true,
                         subText:
-                            "Allow only your friends to discover profile when using Near Me in your location. ",
+                            "Izinkan hanya teman Anda yang menemukan profil saat menggunakan didekat saya di lokasi Anda.",
                       ),
                       SettingTile(
                         icon: Icons.group,
                         onSwitchChanged: (value) {},
-                        text: "Who can send messages",
+                        text: "Siapa yang bisa mengirim pesan",
                         active: true,
                         subText:
-                            "Set custom markers to actors currently moving",
+                            "Tetapkan penanda khusus untuk aktor yang sedang bergerak",
                       ),
                     ],
                   ),
@@ -179,4 +182,3 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
-

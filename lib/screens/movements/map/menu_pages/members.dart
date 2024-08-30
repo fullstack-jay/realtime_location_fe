@@ -4,6 +4,10 @@ import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../widgets/app_bar_2.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_1/controllers/movements_controller.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
+import 'package:flutter_application_1/models/movement.dart';
 
 class MembersPage extends StatefulWidget {
   const MembersPage({super.key});
@@ -13,6 +17,11 @@ class MembersPage extends StatefulWidget {
 }
 
 class _MembersPageState extends State<MembersPage> {
+  final moveController = Get.find<MovementController>();
+  final auth = AuthService().getAuth();
+
+  Movement? movement;
+
   // Dummy data untuk menggantikan data dari backend
   final List<Member> currentMoveMembers = [
     Member(
@@ -48,7 +57,7 @@ class _MembersPageState extends State<MembersPage> {
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const AnotherCustomAppBar(
-                  title: "Members",
+                  title: "Anggota",
                 ),
               ),
             ),
@@ -61,10 +70,10 @@ class _MembersPageState extends State<MembersPage> {
                 Row(
                   children: [
                     Text(
-                      "members".toUpperCase(),
+                      "anggota".toUpperCase(),
                       style: TextStyle(
                         fontSize: 15.sp,
-                        color: primary.withOpacity(0.7),
+                        //color: primary.withOpacity(0.7),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -93,7 +102,7 @@ class _MembersPageState extends State<MembersPage> {
                               color: Colors.amberAccent,
                             ),
                             Text(
-                              " Creator",
+                              " Pembuat",
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.amberAccent.shade700,
@@ -120,7 +129,7 @@ class _MembersPageState extends State<MembersPage> {
                             ),
                           ),
                           subtitle: Text(
-                            "Created this movement ${timeago.format(createdAt)}",
+                            "Pembuat gerakan ini ${timeago.format(createdAt)}",
                             maxLines: 2,
                           ),
                         ),
@@ -133,7 +142,7 @@ class _MembersPageState extends State<MembersPage> {
                               color: Colors.green.shade400,
                             ),
                             Text(
-                              " Active",
+                              " Aktif",
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.green.shade400,
@@ -172,7 +181,7 @@ class _MembersPageState extends State<MembersPage> {
                                 ),
                               ),
                               subtitle: Text(
-                                "Joined ${timeago.format(currentMoveMembers[i].joinedAt)}",
+                                "Bergabung ${timeago.format(currentMoveMembers[i].joinedAt)}",
                                 maxLines: 2,
                               ),
                             ),
@@ -185,7 +194,7 @@ class _MembersPageState extends State<MembersPage> {
                               color: Colors.redAccent.shade700,
                             ),
                             Text(
-                              " Inactive",
+                              " Tidak Aktif",
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.redAccent.shade700,

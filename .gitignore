@@ -1,3 +1,5 @@
+/assets/dotenv/
+
 # Miscellaneous
 *.class
 *.log
@@ -44,4 +46,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-assets/dotenv/.env
+

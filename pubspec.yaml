@@ -50,6 +50,8 @@ dependencies:
   dio: ^5.0.1
   flutter_dotenv: ^5.0.2
   logger: ^2.4.0
+  google_api_availability: ^3.0.0
+  socket_io_client: ^2.0.1
 
 dev_dependencies:
   flutter_test:

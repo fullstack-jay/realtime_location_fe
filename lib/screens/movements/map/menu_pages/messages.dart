@@ -7,6 +7,7 @@ import 'package:flutter_application_1/controllers/movements_controller.dart';
 import '../../widgets/app_bar_2.dart';
 import 'package:get/get.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
+import 'package:flutter_application_1/models/user.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key, required this.onSendMessage});
@@ -80,7 +81,7 @@ class _MessagesPageState extends State<MessagesPage> {
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const AnotherCustomAppBar(
-                  title: "Messages",
+                  title: "Pesan",
                 ),
               ),
             ),
@@ -98,13 +99,13 @@ class _MessagesPageState extends State<MessagesPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Be the first to talk to movement members.",
+                                "Jadilah orang pertama yang berbicara dengan anggota lain.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 13.sp),
                               ),
                               TextButton(
-                                onPressed: () => _onSend("Hi folks!"),
-                                child: const Text("Say Hi 👋"),
+                                onPressed: () => _onSend("Hi Reza!"),
+                                child: const Text("Katakan Hi 👋"),
                               ),
                             ],
                           ),
@@ -155,7 +156,7 @@ class _MessagesPageState extends State<MessagesPage> {
                                 horizontal: 15.w,
                                 vertical: 10.h,
                               ),
-                              hintText: "Send a message",
+                              hintText: "Kirim sebuah pesan",
                               border: InputBorder.none,
                             ),
                           ),
@@ -177,7 +178,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           child: Row(
                             children: [
                               const Text(
-                                " Send",
+                                " Kirim",
                                 style: TextStyle(
                                   color: primary,
                                   fontWeight: FontWeight.w600,
@@ -203,32 +204,4 @@ class _MessagesPageState extends State<MessagesPage> {
       ),
     );
   }
-}
-
-class ChatMessage {
-  final User user;
-  final String message;
-  final DateTime sentAt;
-  final bool seen;
-
-  ChatMessage({
-    required this.user,
-    required this.message,
-    required this.sentAt,
-    required this.seen,
-  });
-}
-
-class User {
-  final String id;
-  final String username;
-  final String imgUrl;
-  final DateTime joinedAt;
-
-  User({
-    required this.id,
-    required this.username,
-    required this.imgUrl,
-    required this.joinedAt,
-  });
 }

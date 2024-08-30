@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-// import 'package:quickstep_app/models/user.dart';
-//import 'package:flutter_application_1/screens/movements/map/widgets/marker_custom.dart';
-// import 'package:quickstep_app/services/auth_service.dart';
+import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/screens/movements/map/widgets/marker_custom.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/helpers.dart';
 
@@ -20,6 +20,7 @@ class ChooseLocationDialog extends StatefulWidget {
 class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
   LatLng? currentLocation;
   LatLng? choosenLocation;
+  final profile = AuthService().getAuth();
   final String profilePic =
       "assets/images/profile_placeholder.png"; // Placeholder image path
 
@@ -297,6 +298,19 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
         snippet: desc,
       ),
     );
+    if (id == "current-location") {
+      marker = await customMarker(
+        MoveUser(
+          user: User(
+            id: id,
+            imgUrl: profile!.profilePic,
+            username: "You",
+            joinedAt: null,
+          ),
+          location: location,
+        ),
+      );
+    }
 
     // No backend model or custom marker used, simple marker logic only
     setState(() {

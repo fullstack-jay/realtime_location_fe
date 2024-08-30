@@ -9,6 +9,7 @@ import 'package:flutter_application_1/screens/movements/map/widgets/marker_custo
 import 'package:flutter_application_1/utils/helpers.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:get/get.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../utils/keys.dart';
@@ -16,7 +17,6 @@ import '../../../movements/map/widgets/warn_dialog.dart';
 import '../../../movements/widgets/app_bar_2.dart';
 import 'package:flutter_application_1/models/self_made_walk.dart';
 import 'save_walk_dialog.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 enum SelfMadeWalkMapMode { idle, walk }
 
@@ -42,6 +42,7 @@ class SelfMadeWalkMap extends StatefulWidget {
 class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   final walkController = Get.put(WalksController());
   final profile = AuthService().getAuth();
+  Location location = Location();
 
   late LatLng origin;
   late LatLng destination;
@@ -58,7 +59,9 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   void initState() {
     origin = widget.points["origin"]!;
     destination = widget.points["destination"]!;
-    //getRoutePolylines();
+
+    getRoutePolylines();
+    _checkGoogleServicesAvailability();
 
     if (widget.mode == SelfMadeWalkMapMode.walk) {
       polylineCurrentLocationCoordinates = [origin];
@@ -69,26 +72,123 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     super.initState();
   }
 
-  // void getRoutePolylines() async {
-  //   try {
-  //     // Dummy polyline points
-  //     List<PointLatLng> dummyPoints = [
-  //       PointLatLng(origin.latitude, origin.longitude),
-  //       PointLatLng(origin.latitude + 0.01, origin.longitude + 0.01),
-  //       PointLatLng(destination.latitude, destination.longitude),
-  //     ];
+  Future<void> _checkGoogleServicesAvailability() async {
+    GooglePlayServicesAvailability availability = await GoogleApiAvailability
+        .instance
+        .checkGooglePlayServicesAvailability();
 
-  //     for (PointLatLng point in dummyPoints) {
-  //       polylineDestinationCoordinates
-  //           .add(LatLng(point.latitude, point.longitude));
-  //     }
+    if (availability == GooglePlayServicesAvailability.success) {
+      _setupLocationTracking();
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Layanan Google Tidak Tersedia"),
+          content: const Text(
+              "Google Play Services tidak tersedia di perangkat ini. Fitur peta mungkin tidak berfungsi dengan baik."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      _setupLocationFallback();
+    }
+  }
 
-  //     if (!mounted) return;
-  //     setState(() {});
-  //   } catch (e) {
-  //     // Handle error
-  //   }
-  // }
+  void _setupLocationTracking() async {
+    // Aktifkan mode akurasi tinggi dengan interval dan jarak minimum
+    location.changeSettings(
+      accuracy: LocationAccuracy.high,
+      interval: 5000, // Update lokasi setiap 5 detik
+      distanceFilter: 10, // Update lokasi setiap 10 meter
+    );
+
+    // Meminta izin lokasi jika belum diperoleh
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    // Memulai pelacakan lokasi
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      setState(() {
+        this.currentLocation = LatLng(
+          currentLocation.latitude!,
+          currentLocation.longitude!,
+        );
+      });
+
+      _updateMap();
+    });
+  }
+
+  void _setupLocationFallback() async {
+    // Menyediakan fallback jika Google Play Services tidak tersedia
+    // Memulai pelacakan lokasi menggunakan `Location` tanpa Google Play Services
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    // Mulai melacak lokasi
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      setState(() {
+        this.currentLocation = LatLng(
+          currentLocation.latitude!,
+          currentLocation.longitude!,
+        );
+      });
+
+      _updateMap();
+    });
+  }
+
+  void _updateMap() {
+    if (googleMapController != null) {
+      googleMapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            zoom: zoomLevel,
+            target: LatLng(
+              currentLocation!.latitude,
+              currentLocation!.longitude,
+            ),
+          ),
+        ),
+      );
+
+      setState(() {
+        polylineCurrentLocationCoordinates.add(currentLocation!);
+      });
+    }
+  }
 
   void getRoutePolylines() async {
     try {
@@ -121,6 +221,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
 
   void getLocation() async {
     Location location = Location();
+
     final locationData = await location.getLocation();
     setState(() {
       currentLocation = LatLng(
@@ -149,8 +250,10 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
           CameraUpdate.newCameraPosition(
             CameraPosition(
               zoom: zoomLevel,
-              target:
-                  LatLng(currentLocation!.latitude, currentLocation!.longitude),
+              target: LatLng(
+                currentLocation!.latitude,
+                currentLocation!.longitude,
+              ),
             ),
           ),
         );
@@ -203,7 +306,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                   color: Colors.transparent,
                   child: AnotherCustomAppBar(
                     title: widget.walk == null
-                        ? "Self-made Walk"
+                        ? "Membuat Perjalanan"
                         : cfl(widget.walk!.title),
                   ),
                 ),
@@ -223,12 +326,12 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     mapType: MapType.hybrid,
                     polylines: {
                       Polyline(
-                        polylineId: const PolylineId("destination-route"),
+                        polylineId: const PolylineId("rute-tujuan"),
                         points: polylineDestinationCoordinates,
                         color: lightPrimary,
                       ),
                       Polyline(
-                        polylineId: const PolylineId("current-route"),
+                        polylineId: const PolylineId("posisi-sekarang"),
                         points: polylineCurrentLocationCoordinates,
                         color: Colors.green.shade400,
                         width: 8,
@@ -247,24 +350,24 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     onMapCreated: (controller) {
                       googleMapController = controller;
                       addMarker(
-                        "origin",
+                        "asal",
                         origin,
-                        "Origin",
-                        "The origin location",
+                        "Asal",
+                        "Lokasi Asal",
                       );
                       addMarker(
-                        "destination",
+                        "tujuan",
                         destination,
-                        "Destination",
-                        "The destination location",
+                        "Tujuan",
+                        "Lokasi Tujuan",
                       );
                       if (widget.mode == SelfMadeWalkMapMode.idle &&
                           widget.walk != null) {
                         addMarker(
-                          "final-made-destination",
+                          "tujuan-akhir-yang-dibuat",
                           widget.walk!.coordinates.last,
-                          "Where I stopped",
-                          "This travel took ${getTimer(widget.walk!.createdAt, widget.walk!.endedAt)}",
+                          "Dimana saya berhenti",
+                          "Perjalanan ini memakan waktu ${getTimer(widget.walk!.createdAt, widget.walk!.endedAt)}",
                         );
                       }
                     },
@@ -281,7 +384,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         if (currentLocation == null) return;
                         final name = await showGeneralDialog<String>(
                           context: context,
-                          barrierLabel: "save-walk",
+                          barrierLabel: "simpan-perjalanan",
                           barrierColor: Colors.black26,
                           barrierDismissible: true,
                           transitionDuration: const Duration(milliseconds: 400),
@@ -315,8 +418,8 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           destinationPosition: destination,
                           title: name,
                           createdAt: widget.startedAt,
-                          creatorId:
-                              AuthService().getAuth()?.userId ?? "unknown-user",
+                          creatorId: AuthService().getAuth()?.userId ??
+                              "user-tidak-dikenal",
                           endedAt: DateTime.now(),
                         );
                         // Logic to handle saved walk locally
@@ -324,7 +427,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         if (!mounted) return;
                         popPage(context);
                       },
-                      child: const Text("Stop"),
+                      child: const Text("Berhenti"),
                     ),
                   )
               ],
@@ -370,8 +473,9 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
         MoveUser(
           user: User(
             id: id,
-            imgUrl: "your_profile_pic_url", // Placeholder for user profile pic
-            username: "You",
+            imgUrl:
+                ("assets/images/reza.png"), // Placeholder for user profile pic
+            username: "Reza",
             joinedAt: "your_joined_date", // Placeholder for joined date
           ),
           location: location,

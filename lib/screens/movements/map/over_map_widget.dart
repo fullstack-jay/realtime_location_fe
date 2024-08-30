@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_application_1/screens/movements/map/data.dart';
+import 'package:flutter_application_1/controllers/movements_controller.dart';
 import 'package:flutter_application_1/screens/movements/map/menu_pages/messages.dart';
 import 'package:flutter_application_1/screens/widgets/slide_fade_switcher.dart';
 
@@ -13,10 +14,12 @@ class OverMapWidget extends StatefulWidget {
   const OverMapWidget({
     Key? key,
     required this.membersLength,
+    required this.cnt,
     required this.onSendMessage,
   }) : super(key: key);
 
   final int membersLength;
+  final MovementController cnt;
   final void Function(String message) onSendMessage;
 
   @override
@@ -41,10 +44,10 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                     context: context,
                     builder: (context) {
                       return const WarnDialogWidget(
-                        title: "Leave movement",
+                        title: "Tinggalkan perjalanan",
                         subtitle:
-                            "Are you sure you want to leave this movement?",
-                        okButtonText: "Leave",
+                            "Apakah kamu yakin ingin meninggalkan perjalanan ini?",
+                        okButtonText: "Tinggalkan",
                       );
                     },
                   );
@@ -135,7 +138,7 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                                       ),
                                     ),
                                     const Spacer(),
-                                    if (MapMenu.items[i].text != "Settings")
+                                    if (MapMenu.items[i].text != "Pengaturan")
                                       Container(
                                         alignment: Alignment.center,
                                         padding: EdgeInsets.symmetric(

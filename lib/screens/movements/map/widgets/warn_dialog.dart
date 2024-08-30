@@ -53,7 +53,7 @@ class WarnDialogWidget extends StatelessWidget {
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.grey,
                   ),
-                  child: const Text("Cancel"),
+                  child: const Text("Batal"),
                 ),
                 addHorizontalSpace(10),
                 TextButton(
