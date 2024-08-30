@@ -119,28 +119,6 @@ class _CreateMovementState extends State<CreateMovement> {
                             cat = category;
                           });
                         }),
-                        // addVerticalSpace(18),
-                        // Text(
-                        //   "choose source(optional)".toUpperCase(),
-                        //   style: TextStyle(
-                        //     fontSize: 15.sp,
-                        //     color: primary.withOpacity(0.7),
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
-                        // addVerticalSpace(8),
-                        // const ChooseLocationWidget(),
-                        // addVerticalSpace(18),
-                        // Text(
-                        //   "choose destination(optional)".toUpperCase(),
-                        //   style: TextStyle(
-                        //     fontSize: 15.sp,
-                        //     color: primary.withOpacity(0.7),
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
-                        // addVerticalSpace(8),
-                        // const ChooseLocationWidget(),
                         addVerticalSpace(18),
                         Text(
                           "lanjutkan untuk mengundang teman perjalanan"

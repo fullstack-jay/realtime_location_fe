@@ -11,11 +11,12 @@ import 'package:flutter_application_1/models/user.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
-//import '../../../../utils/keys.dart';
+import '../../../../utils/keys.dart';
 import '../../../movements/map/widgets/warn_dialog.dart';
 import '../../../movements/widgets/app_bar_2.dart';
 import 'package:flutter_application_1/models/self_made_walk.dart';
 import 'save_walk_dialog.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 enum SelfMadeWalkMapMode { idle, walk }
 
@@ -68,24 +69,53 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     super.initState();
   }
 
+  // void getRoutePolylines() async {
+  //   try {
+  //     // Dummy polyline points
+  //     List<PointLatLng> dummyPoints = [
+  //       PointLatLng(origin.latitude, origin.longitude),
+  //       PointLatLng(origin.latitude + 0.01, origin.longitude + 0.01),
+  //       PointLatLng(destination.latitude, destination.longitude),
+  //     ];
+
+  //     for (PointLatLng point in dummyPoints) {
+  //       polylineDestinationCoordinates
+  //           .add(LatLng(point.latitude, point.longitude));
+  //     }
+
+  //     if (!mounted) return;
+  //     setState(() {});
+  //   } catch (e) {
+  //     // Handle error
+  //   }
+  // }
+
   void getRoutePolylines() async {
     try {
-      // Dummy polyline points
-      List<PointLatLng> dummyPoints = [
-        PointLatLng(origin.latitude, origin.longitude),
-        PointLatLng(origin.latitude + 0.01, origin.longitude + 0.01),
-        PointLatLng(destination.latitude, destination.longitude),
-      ];
+      PolylinePoints polylinePoints = PolylinePoints();
 
-      for (PointLatLng point in dummyPoints) {
-        polylineDestinationCoordinates
-            .add(LatLng(point.latitude, point.longitude));
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey,
+        PointLatLng(
+          origin.latitude,
+          origin.longitude,
+        ),
+        PointLatLng(
+          destination.latitude,
+          destination.longitude,
+        ),
+      );
+      if (result.points.isNotEmpty) {
+        for (PointLatLng point in result.points) {
+          polylineDestinationCoordinates.add(
+            LatLng(point.latitude, point.longitude),
+          );
+        }
+        if (!mounted) return;
+        setState(() {});
       }
-
-      if (!mounted) return;
-      setState(() {});
     } catch (e) {
-      // Handle error
+      // print("Unstable internet connection error");
     }
   }
 
@@ -285,7 +315,8 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           destinationPosition: destination,
                           title: name,
                           createdAt: widget.startedAt,
-                          creatorId: AuthService().getAuth()?.userId ?? "unknown-user",
+                          creatorId:
+                              AuthService().getAuth()?.userId ?? "unknown-user",
                           endedAt: DateTime.now(),
                         );
                         // Logic to handle saved walk locally

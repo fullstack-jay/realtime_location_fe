@@ -7,6 +7,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../../utils/colors.dart';
 import '../../../movements/map/widgets/warn_dialog.dart';
 import 'package:flutter_application_1/models/self_made_walk.dart';
+import 'package:get/get.dart';
+import '../../../../controllers/self_made_walks_controller.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 
 class SelfMadeWalksWidget extends StatefulWidget {
   const SelfMadeWalksWidget({Key? key}) : super(key: key);
@@ -17,6 +20,10 @@ class SelfMadeWalksWidget extends StatefulWidget {
 
 class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
   // Updated mock data with all fields initialized
+  final walkController = Get.put(WalksController());
+  final profile = AuthService().getAuth();
+
+  // Data dummy yang sudah didefinisikan sebelumnya
   final List<SelfMadeWalk> walks = [
     SelfMadeWalk(
       id: 1,
@@ -40,20 +47,29 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
     ),
   ];
 
-  void _handleDelete(SelfMadeWalk walk) {
-    setState(() {
-      walks.remove(walk);
-    });
+  void getWalks() {
+    walkController.getWalks();
+  }
+
+  void _handleDelete(SelfMadeWalk walk) async {
+    walkController.removeWalk(walk);
+  }
+
+  @override
+  void initState() {
+    getWalks();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    walks.sort((a, b) => b.endedAt.compareTo(a.endedAt));
     return Column(
       children: [
         Row(
           children: [
             Text(
-              "Lakukan Perjalanan Dinas",
+              "Perjalanan yang sudah dilakukan",
               style: TextStyle(
                 fontSize: 18.sp,
                 color: Colors.grey.shade700,
@@ -186,20 +202,57 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Map<String, LatLng> points = {
-                                      "origin": walk.initialPosition,
-                                      "destination": walk.destinationPosition,
-                                    };
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SelfMadeWalkMap(
-                                          points: points,
-                                          mode: SelfMadeWalkMapMode.idle,
-                                          startedAt: DateTime.now(),
+                                    if (walk != null &&
+                                        walk.initialPosition != null &&
+                                        walk.destinationPosition != null) {
+                                      Map<String, LatLng> points = {
+                                        "origin": walk.initialPosition!,
+                                        "destination":
+                                            walk.destinationPosition!,
+                                      };
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SelfMadeWalkMap(
+                                            points: points,
+                                            mode: SelfMadeWalkMapMode.idle,
+                                            startedAt: DateTime.now(),
+                                            walk:
+                                                walk, // Pastikan walk tidak null
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      // Jika salah satu dari posisi atau walk null, tampilkan data dummy
+                                      Map<String, LatLng> dummyPoints = {
+                                        "origin": LatLng(0.0, 0.0),
+                                        "destination": LatLng(0.0, 0.0),
+                                      };
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SelfMadeWalkMap(
+                                            points: dummyPoints,
+                                            mode: SelfMadeWalkMapMode.idle,
+                                            startedAt: DateTime.now(),
+                                            walk: SelfMadeWalk(
+                                              // Buat dummy walk untuk sementara
+                                              id: 0,
+                                              initialPosition: LatLng(0.0, 0.0),
+                                              coordinates: [LatLng(0.0, 0.0)],
+                                              destinationPosition:
+                                                  LatLng(0.0, 0.0),
+                                              title: "Dummy Walk",
+                                              createdAt: DateTime.now(),
+                                              creatorId: "Dummy Creator",
+                                              endedAt: DateTime.now(),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     minimumSize: Size.zero,
@@ -211,7 +264,12 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
                                       borderRadius: BorderRadius.circular(25.r),
                                     ),
                                   ),
-                                  child: const Text("Lihat Perjalanan"),
+                                  child: Text(
+                                    "Lihat Perjalanan",
+                                    style: TextStyle(
+                                      fontSize: 9.7.sp,
+                                    ),
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
