@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_application_1/utils/colors.dart';
-import 'package:flutter_application_1/utils/helpers.dart';
-import '../signup/signup_page.dart';
 
 import 'signin_form.dart';
 
@@ -57,57 +54,6 @@ Future<Object?> customSignInDialog(BuildContext context,
                     ),
                   ),
                   const SignInForm(),
-                  Row(
-                    children: [
-                      const Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: const Text(
-                          "Atau",
-                          style: TextStyle(
-                            color: Colors.black26,
-                          ),
-                        ),
-                      ),
-                      const Expanded(child: Divider()),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: Text(
-                      "Login dengan Email",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          popPage(context);
-                          pushPage(context, to: const SignUpPage());
-                        },
-                        icon: SvgPicture.asset(
-                          "assets/icons/email_box.svg",
-                          height: 64.r,
-                          width: 64.r,
-                        ),
-                      ),
-                      // IconButton(
-                      //   padding: EdgeInsets.zero,
-                      //   onPressed: () {},
-                      //   icon: SvgPicture.asset(
-                      //     "assets/icons/google_box.svg",
-                      //     height: 64.r,
-                      //     width: 64.r,
-                      //   ),
-                      // ),
-                    ],
-                  )
                 ],
               ),
             ),

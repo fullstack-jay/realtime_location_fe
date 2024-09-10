@@ -20,13 +20,13 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   final IsLoading _isLoading = IsLoading.idle;
 
-  String? email;
+  String? phone;
   String? password;
 
   void _sign() async {
-    if (email != null &&
+    if (phone != null &&
         password != null &&
-        email!.isNotEmpty &&
+        phone!.isNotEmpty &&
         password!.isNotEmpty) {
       // Navigate to LayoutPage
       Get.offAll(() => const LayoutPage()); // Use your layout page widget
@@ -46,11 +46,11 @@ class _SignInFormState extends State<SignInForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SignInInputField(
-            hintText: "Email",
-            svg: "email.svg",
+            hintText: "Nomor HP",
+            svg: "phone.svg",
             onChanged: (value) {
               setState(() {
-                email = value;
+                phone = value;
               });
             },
           ),
